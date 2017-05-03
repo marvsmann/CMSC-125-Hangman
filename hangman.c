@@ -8,8 +8,7 @@
 #include "../../sdk/dexsdk.h"
 #include "../../sdk/time.h"
 
-
-void print_display();
+void error_function(int x, int y);
 void display_game();
 void arrow(int x, int y); //selector
 void head(int x, int y);
@@ -39,15 +38,19 @@ void erase();
 #define BLACK 100
 #define RED 36
 #define CYAN 27
+#define BROWN 20
+#define ORANGE 38
+#define SKIN 47
+#define GRAY 56
+#define BLUE 25
 
 int puzzle = 1, count;
-
+int error = 0;
 
 int main()
 {
 	int status = start_game;
 	char keypress;
-	int error = 0;
 	int winner, puzzle, select, game_status;
 	int x, y;
 
@@ -171,12 +174,12 @@ int main()
 
 				}
 				else if(keypress == exit){
-					write_text("Do you want to exit? y/n",85,160,WHITE,0);
+					write_text("Do you want to exit? y/n",85,185,WHITE,0);
 					keypress = (char)getch();
-					erase(85,160,215,10);
+					erase(85,185,215,10);
 				}
 				else if(keypress == reset){
-					write_text("Do you want to reset? y/n",80,160,WHITE,0);
+					write_text("Do you want to reset? y/n",80,185,WHITE,0);
 					keypress = (char)getch();
 					if(keypress == yes) {
 						game_status = 1;
@@ -188,7 +191,7 @@ int main()
 						arrow(x, y);
 
 					}
-					erase(80,160,221,10);
+					erase(80,185,221,10);
 				}
 			}while(keypress != yes);
 
@@ -201,6 +204,68 @@ int main()
 
 	set_graphics(VGA_TEXT80X25X16);
 	clrscr();
+}
+
+void error_function(int x, int y){
+	int i,j;
+
+	//head
+	for(i=0;i<9;i++){
+		for(j=0;j<24;j++){
+			write_pixel(j+x,i+y,BROWN);
+		}
+	}
+	for(i=0;i<15;i++){
+		for(j=0;j<24;j++){	
+			write_pixel(j+x,i+9+y,SKIN);
+		}
+	}
+	for(i=3;i<21;i++)write_pixel(i+x,6+y,SKIN);
+	for(i=3;i<21;i++)write_pixel(i+x,7+y,SKIN);
+	for(i=3;i<21;i++)write_pixel(i+x,8+y,SKIN);
+	for(i=0;i<3;i++){
+		for(j=0;j<3;j++){	
+			write_pixel(j+3+x,i+12+y,WHITE);
+			write_pixel(j+18+x,i+12+y,WHITE);
+			write_pixel(j+6+x,i+12+y,BLACK);
+			write_pixel(j+15+x,i+12+y,BLACK);
+		}
+	}
+
+	//body
+	for(i=0;i<35;i++){
+		for(j=0;j<24;j++){
+			write_pixel(j+x,i+27+y,CYAN);
+		}
+	}
+	for(i=0;i<3;i++){
+		for(j=3;j<21;j++)write_pixel(j+x,i+27+y,BLUE);
+		for(j=3;j<21;j++)write_pixel(j+x,i+30+y,BLUE);
+		for(j=6;j<18;j++)write_pixel(j+x,i+33+y,BLUE);
+		for(j=6;j<18;j++)write_pixel(j+x,i+36+y,BLUE);	
+		for(j=9;j<15;j++)write_pixel(j+x,i+39+y,BLUE);
+		for(j=9;j<15;j++)write_pixel(j+x,i+42+y,BLUE);	
+		for(j=6;j<18;j++)write_pixel(j+x,i+27+y,SKIN);
+		for(j=6;j<18;j++)write_pixel(j+x,i+30+y,SKIN);
+		for(j=9;j<15;j++)write_pixel(j+x,i+33+y,SKIN);
+		for(j=9;j<15;j++)write_pixel(j+x,i+36+y,SKIN);
+	}
+
+	//right hand
+	for(i=0;i<12;i++){
+		for(j=0;j<6;j++){
+			write_pixel(j+x-9,i+y+27,CYAN);
+			write_pixel(j+x-9,i+9+y+27,SKIN);
+		}
+	}
+
+	//left hand
+	for(i=0;i<12;i++){
+		for(j=0;j<6;j++){
+			write_pixel(j+x+27,i+y+27,CYAN);
+			write_pixel(j+x+27,i+9+y+27,SKIN);
+		}
+	}
 }
 
 void display_game(){
@@ -240,11 +305,9 @@ void display_game(){
 	write_text("Y",45,135,WHITE,0);
 	write_text("Z",45,145,WHITE,0);
 
-	write_text("Errors:",5,160,WHITE,10);
-
 	//LEGENDS
-	write_text("X-Exit",115,180,WHITE,0);
-	write_text("R-Reset",195,180,WHITE,0);
+	write_text("X-Exit",10,170,WHITE,0);
+	write_text("R-Reset",10,180,WHITE,0);
 
 	/*y = 25;
 	for(i=0;i<65;i++){
@@ -253,6 +316,8 @@ void display_game(){
 			write_pixel(j+x,i+y,i);
 		}
 	}*/
+
+	error_function(115, 25);
 }
 
 void arrow(int x, int y){
