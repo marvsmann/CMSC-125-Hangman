@@ -40,9 +40,10 @@ void erase();
 #define CYAN 27
 #define BROWN 20
 #define ORANGE 38
-#define SKIN 47
+#define SKIN 46
 #define GRAY 56
 #define BLUE 25
+#define DIRTY 48
 
 int puzzle = 1, count;
 int error = 0;
@@ -100,9 +101,9 @@ int main()
 
 			//start
 			keypress = yes;
-			x = 10;
+			x = 6;
 			y = 22;
-			arrow(10, 22);
+			arrow(6, 22);
 
 			do{
 				if(game_status == 1){
@@ -118,54 +119,54 @@ int main()
 						if(keypress == up_key){
 							//top
 							if(y == 22){
-								erase(x, y, 7, 12);
+								erase(x, y, 10, 12);
 								y = 142;
 								arrow(x, y);
 							}
 							else{
-								erase(x, y, 7, 12);
+								erase(x, y, 10, 12);
 								y = y-10;
 								arrow(x, y);
 							}
 						}
 						else if(keypress == down_key){
 							if(y == 142){
-								erase(x, y, 7, 12);
+								erase(x, y, 10, 12);
 								y = 22;
 								arrow(x, y);
 							}
 							else{
-								erase(x, y, 7, 12);
+								erase(x, y, 10, 12);
 								y = y+10;
 								arrow(x, y);
 							}
 						}
 						else if(keypress == right_key){
-							if(x == 35){
-								erase(x, y, 7, 12);
-								x = 10; 
+							if(x == 31){
+								erase(x, y, 10, 12);
+								x = 6; 
 								arrow(x, y);
 							}
 							else{
-								erase(x, y, 7, 12);
-								x = 35;
+								erase(x, y, 10, 12);
+								x = 31;
 								arrow(x, y);
 							}
 						}
 						else if(keypress == left_key){
-							if(x == 10){
-								erase(x, y, 7, 12);
-								x = 35;
+							if(x == 6){
+								erase(x, y, 10, 12);
+								x = 31;
 								arrow(x, y);
 							}
 							else{
-								erase(x, y, 7, 12);
-								x = 10;
+								erase(x, y, 10, 12);
+								x = 6;
 								arrow(x, y);
 							}	
 						}
 						else if(keypress == enter_key){
-							erase(x+10, y+3, 10, 7);
+							erase(x+11, y+3, 10, 7);
 						}
 					}
 				}while(keypress != exit && keypress != reset && error != 5 && winner != 1);
@@ -185,8 +186,8 @@ int main()
 						game_status = 1;
 						keypress = no;
 						
-						erase(x, y, 7, 12);
-						x = 10;
+						erase(x, y, 10, 12);
+						x = 6;
 						y = 22;
 						arrow(x, y);
 
@@ -207,7 +208,7 @@ int main()
 }
 
 void error_function(int x, int y){
-	int i,j;
+	int i,j,k;
 
 	//head
 	for(i=0;i<9;i++){
@@ -233,29 +234,24 @@ void error_function(int x, int y){
 	}
 
 	//body
-	for(i=0;i<35;i++){
+	for(i=0;i<33;i++){
 		for(j=0;j<24;j++){
 			write_pixel(j+x,i+27+y,CYAN);
 		}
 	}
 	for(i=0;i<3;i++){
 		for(j=3;j<21;j++)write_pixel(j+x,i+27+y,BLUE);
-		for(j=3;j<21;j++)write_pixel(j+x,i+30+y,BLUE);
-		for(j=6;j<18;j++)write_pixel(j+x,i+33+y,BLUE);
-		for(j=6;j<18;j++)write_pixel(j+x,i+36+y,BLUE);	
-		for(j=9;j<15;j++)write_pixel(j+x,i+39+y,BLUE);
-		for(j=9;j<15;j++)write_pixel(j+x,i+42+y,BLUE);	
+		for(j=6;j<18;j++)write_pixel(j+x,i+30+y,BLUE);
+		for(j=9;j<15;j++)write_pixel(j+x,i+33+y,BLUE);	
 		for(j=6;j<18;j++)write_pixel(j+x,i+27+y,SKIN);
-		for(j=6;j<18;j++)write_pixel(j+x,i+30+y,SKIN);
-		for(j=9;j<15;j++)write_pixel(j+x,i+33+y,SKIN);
-		for(j=9;j<15;j++)write_pixel(j+x,i+36+y,SKIN);
+		for(j=9;j<15;j++)write_pixel(j+x,i+30+y,SKIN);
 	}
 
 	//right hand
 	for(i=0;i<12;i++){
 		for(j=0;j<6;j++){
 			write_pixel(j+x-9,i+y+27,CYAN);
-			write_pixel(j+x-9,i+9+y+27,SKIN);
+			write_pixel(j+x-9,i+12+y+27,SKIN);
 		}
 	}
 
@@ -263,9 +259,63 @@ void error_function(int x, int y){
 	for(i=0;i<12;i++){
 		for(j=0;j<6;j++){
 			write_pixel(j+x+27,i+y+27,CYAN);
-			write_pixel(j+x+27,i+9+y+27,SKIN);
+			write_pixel(j+x+27,i+12+y+27,SKIN);
 		}
 	}
+
+	//right leg
+	for(i=0;i<21;i++){
+		for(j=0;j<9;j++){
+			write_pixel(j+x,i+y+63,GRAY);
+			
+		}
+	}
+	for(i=0;i<6;i++){
+		for(j=0;j<12;j++){
+			write_pixel(j+x-3,i+y+84,DIRTY);
+			
+		}
+	}
+
+	//left leg
+	for(i=0;i<21;i++){
+		for(j=0;j<9;j++){
+			write_pixel(j+x+15,i+y+63,GRAY);
+			
+		}
+	}
+	for(i=0;i<6;i++){
+		for(j=0;j<12;j++){
+			write_pixel(j+x+15,i+y+84,DIRTY);
+			
+		}
+	}
+
+	//slash with a smile
+	k = 156;
+	for(i=0;i<18;i++ ,k--){
+		for(j=0;j<k;j++){
+			write_pixel(j+x+45,i+y+39,GRAY);
+		}
+	}
+
+	k = 150;
+	for(i=0;i<6;i++ ,k--){
+		for(j=0;j<k;j++){
+			write_pixel(j+x+45,i+y+45,RED);
+		}
+	}
+	for(i=0;i<6;i++){
+		for(j=0;j<14;j++){
+			write_pixel(j+x+36,i+y+45,GRAY);			
+		}
+	}	
+	
+	for(i=0;i<24;i++)write_pixel(x+45,i+y+36,RED);
+	for(i=0;i<22;i++)write_pixel(x+46,i+y+37,RED);	
+	for(i=0;i<20;i++)write_pixel(x+47,i+y+38,RED);	
+	
+
 }
 
 void display_game(){
@@ -322,20 +372,17 @@ void display_game(){
 
 void arrow(int x, int y){
 	int i;
-	for (i=1;i<2;i++)write_pixel(i+x,0+y,YELLOW);
-	for (i=1;i<3;i++)write_pixel(i+x,1+y,YELLOW);
-	for (i=1;i<4;i++)write_pixel(i+x,2+y,YELLOW);
-	for (i=1;i<5;i++)write_pixel(i+x,3+y,YELLOW);
-	for (i=1;i<6;i++)write_pixel(i+x,4+y,YELLOW);
-	for (i=1;i<7;i++)write_pixel(i+x,5+y,YELLOW);
-	for (i=1;i<7;i++)write_pixel(i+x,7+y,YELLOW);
-	for (i=1;i<6;i++)write_pixel(i+x,8+y,YELLOW);	
-	for (i=1;i<5;i++)write_pixel(i+x,9+y,YELLOW);
-	for (i=1;i<4;i++)write_pixel(i+x,10+y,YELLOW);
-	for (i=1;i<3;i++)write_pixel(i+x,11+y,YELLOW);
-	for (i=1;i<2;i++)write_pixel(i+x,12+y,YELLOW);
+	
+	for (i=4;i<11;i++)write_pixel(i+x,5+y,GRAY);
+	for (i=4;i<10;i++)write_pixel(i+x,6+y,RED);
+	for (i=4;i<9;i++)write_pixel(i+x,7+y,GRAY);
+	
+	for (i=0;i<9;i++)write_pixel(x+2,2+i+y,RED);
+	for (i=0;i<9;i++)write_pixel(x+3,2+i+y,RED);	
+	for (i=1;i<4;i++)write_pixel(x+1,4+i+y,GRAY);
+	for (i=1;i<4;i++)write_pixel(x,4+i+y,GRAY);	
 
-	for (i=0;i<13;i++)write_pixel(x,i+y,RED);	
+	write_pixel(x+4,y+6,GRAY);	
 }
 
 void head(int x, int y){
