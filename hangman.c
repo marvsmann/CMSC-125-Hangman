@@ -44,12 +44,76 @@ void erase();
 #define GRAY 56
 #define BLUE 25
 #define DIRTY 48
+#define intMask 67108864
+
 
 int puzzle = 1, count;
 int error = 0;
+char * letters[26];
+int index = 0;
+int count = 0;
+int i;
+char * source = "MARV";
+char * new_word = "";
+int config[26];
+
+int createWord(char * word){
+	unsigned long long newWord = 0;
+	int i;
+	int length = strlen(word);
+	for(i = 0; i < length;i++){
+		newWord ^= intMask >> (word[i]-64);
+	}
+
+	return newWord;
+}
+
+int checkLetter(char * sourceWord,char * input){
+	int sourceValue = createWord(sourceWord);
+	int wordValue = createWord(input);
+
+	if(sourceValue - (sourceValue ^ wordValue) == wordValue){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
 
 int main()
 {
+	for(i = 0;i<26;i++){
+		config[i] = 0;
+	}
+
+	letters[0] = "A";
+	letters[1] = "B";
+	letters[2] = "C";
+	letters[3] = "D";
+	letters[4] = "E";
+	letters[5] = "F";
+	letters[6] = "G";
+	letters[7] = "H";
+	letters[8] = "I";
+	letters[9] = "J";
+	letters[10] = "K";
+	letters[11] = "L";
+	letters[12] = "M";
+	letters[13] = "N";
+	letters[14] = "O";
+	letters[15] = "P";
+	letters[16] = "Q";
+	letters[17] = "R";
+	letters[18] = "S";
+	letters[19] = "T";
+	letters[20] = "U";
+	letters[21] = "V";
+	letters[22] = "W";
+	letters[23] = "X";
+	letters[24] = "Y";
+	letters[25] = "Z";
+
 	int status = start_game;
 	char keypress;
 	int winner, puzzle, select, game_status;
@@ -119,11 +183,19 @@ int main()
 						if(keypress == up_key){
 							//top
 							if(y == 22){
+								if(x == 6){
+									index = 12;
+								}
+								else{
+									index = 25;
+								}
+
 								erase(x, y, 10, 12);
 								y = 142;
 								arrow(x, y);
 							}
 							else{
+								index -= 1;
 								erase(x, y, 10, 12);
 								y = y-10;
 								arrow(x, y);
@@ -131,11 +203,19 @@ int main()
 						}
 						else if(keypress == down_key){
 							if(y == 142){
+								if(x == 6){
+									index = 0;
+								}
+								else{
+									index = 13;
+								}
+
 								erase(x, y, 10, 12);
 								y = 22;
 								arrow(x, y);
 							}
 							else{
+								index +=1;
 								erase(x, y, 10, 12);
 								y = y+10;
 								arrow(x, y);
@@ -143,11 +223,13 @@ int main()
 						}
 						else if(keypress == right_key){
 							if(x == 31){
+								index -= 13;
 								erase(x, y, 10, 12);
 								x = 6; 
 								arrow(x, y);
 							}
 							else{
+								index += 13;
 								erase(x, y, 10, 12);
 								x = 31;
 								arrow(x, y);
@@ -155,21 +237,36 @@ int main()
 						}
 						else if(keypress == left_key){
 							if(x == 6){
+								index += 13;
 								erase(x, y, 10, 12);
 								x = 31;
 								arrow(x, y);
 							}
 							else{
+								index -= 13;
 								erase(x, y, 10, 12);
 								x = 6;
 								arrow(x, y);
 							}	
 						}
 						else if(keypress == enter_key){
+							if(config[index] == 0){
+								if(checkLetter(source,letters[index])){
+									erase(85,160,10,7);
+									write_text(letters[index],85,160,WHITE,0);
+								}
+								else{
+									error++;
+								}
+								config[index] = 1;	
+							}
+							
+
 							erase(x+11, y+3, 10, 7);
 						}
 					}
 				}while(keypress != exit && keypress != reset && error != 5 && winner != 1);
+				
 				
 				if(winner == 1){
 
