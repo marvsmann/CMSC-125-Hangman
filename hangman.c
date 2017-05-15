@@ -59,6 +59,9 @@ int config[26];
 int spaces[26];
 
 char * words[5];
+
+int config[26];
+
 int createWord(char * word){
 	unsigned long long newWord = 0;
 	int i;
@@ -68,15 +71,6 @@ int createWord(char * word){
 	}
 
 	return newWord;
-}
-
-void loadWord(int * spaces,char * word){
-	int length = strlen(word);
-	for(i = 0;i < length;i++){
-		spaces[word[i]-64] = 25 * i;
-	}
-
-	
 }
 
 int checkLetter(char * sourceWord,char * input){
@@ -100,7 +94,6 @@ int main()
 	words[3] = "COMPUTER";
 	words[4] = "UNIQE";
 
-
 	for(i = 0;i<26;i++){
 		config[i] = 0;
 	}
@@ -115,8 +108,6 @@ int main()
 		spaces[source[i]-65] = 25 * i;
 	}
 
-
-	
 	letters[0] = "A";
 	letters[1] = "B";
 	letters[2] = "C";
@@ -143,8 +134,6 @@ int main()
 	letters[23] = "X";
 	letters[24] = "Y";
 	letters[25] = "Z";
-
-
 
 	int status = start_game;
 	char keypress;
@@ -304,11 +293,6 @@ int main()
 
 								}
 								else{
-									erase(85,165,10,10);
-									/*sprintf(string,"%d",spaces[index]);
-									write_text(string,85 + space,165,WHITE,0);*/
-									sprintf(string,"%d",rand());
-									write_text(string,85,165,WHITE,0);
 									error++;
 								}
 								config[index] = 1;	
@@ -467,6 +451,7 @@ void error_function(int x, int y){
 	
 
 }
+
 
 void display_game(){
 	int i, j, x, y;
